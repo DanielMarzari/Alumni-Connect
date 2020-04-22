@@ -17,13 +17,13 @@ String.prototype.format = function() {
         return typeof args[i] != 'undefined' ? args[i] : match;
     });
 }
-
+//New Database Credentials 4/22
 const client = new Client({
-  user: "gejzopxzomezvr",
-  password: "d513f7574cda4cb3a0cfe78b3147f8d9051c4b897f6a8f4bef8554a381bfcf18",
-  database: "d5elim99420pkf",
+  user: "ffeaqahxbntuyt",
+  password: "281ae8a5bb006b3694fb68490c333cf42cc1c04ca64edb01c6b95c2001a428d8",
+  database: "ddogk6h7q61gu6",
   port: 5432,
-  host: "ec2-52-71-55-81.compute-1.amazonaws.com",
+  host: "ec2-34-200-72-77.compute-1.amazonaws.com",
   ssl: {
     rejectUnauthorized: false
   }
@@ -64,18 +64,29 @@ app.use('/db', function(req, res){
 					break;
 				case "update_wh":
 					args = [company, title, time, sdate, edate, description, AID, ID];
-					sql = 'UPDATE "WorkHistory" SET "Company"="{0}", "Title"="{1}", "Part_FullTime"="{2}", "StartDate"=\'{3}\', "EndDate"=\'{4}\', "Description"="{5}", "Alumni_ID"={6}	WHERE "ID"={7}';
+					sql = 'UPDATE "WorkHistory" SET "Company"=\'{0}\', "Title"=\'{1}\', "Part_FullTime"=\'{2}\', "StartDate"=\'{3}\', "EndDate"=\'{4}\', "Description"=\'{5}\', "Alumni_ID"={6}	WHERE "ID"={7}';
 					break;
 				case "update_ai":
 					args = [name, gender, bdate, phone, email, degree, web, linkedin, bio, gyear, pURL, ID];
-					sql = 'UPDATE public."Alumni" SET "FullName"="{0}", "Gender"="{1}", "Birthday"=\'{2}\', "Phone"={3}, "Email"="{4}", "Degree"="{5}", "Website"="{6}", "LinkedInURL"="{7}", "Bio"="{8}", "GraduationYear"={9}, "PictureURL"="{10}" WHERE "ID"={11}';
+					sql = 'UPDATE public."Alumni" SET "FullName"=\'{0}\', "Gender"=\'{1}\', "Birthday"=\'{2}\', "Phone"=\'{3}\', "Email"=\'{4}\', "Degree"=\'{5}\', "Website"=\'{6}\', "LinkedInURL"=\'{7}\', "Bio"=\'{8}\', "GraduationYear"={9}, "PictureURL"=\'{10}\' WHERE "ID"={11}';
 					break;
 				case "search":
 					args = [criteria];
 					sql = 'SELECT "FullName", "GraduationYear", "Degree", array_to_string(array_agg(CONCAT("Title", \' at \', "Company")), \',\') AS "Company", "Alumni"."ID" FROM "WorkHistory" INNER JOIN "Alumni" ON "WorkHistory"."Alumni_ID"="Alumni"."ID" WHERE "FullName" LIKE \'%{0}%\' OR "GraduationYear"::varchar(10) like \'%{0}%\' OR "Degree" LIKE \'%{0}%\' OR "Company" LIKE \'%{0}%\' GROUP BY "Alumni"."ID" ORDER BY "FullName"';
 					break;
 				case "report":
-					args = [reportSQL];
+					with(reportSQL.toLowerCase()){
+						//alter and drop are covered by table and column
+						if(includes("create") || includes("drop") || includes("alter") || includes("delete")){
+							args = ['SELECT \'SQL Execution Forbidden.\' AS "Error"'];
+						}else{
+							if(includes("help")){
+								args = ['SELECT \'Tables: Users, Alumni, WorkHistory, Events\' AS "Help"'];
+							}else{
+								args = [reportSQL];	
+							}
+						}
+					}
 					sql = "{0}";
 					break;
 				case "id":
