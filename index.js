@@ -72,7 +72,7 @@ app.use('/db', function(req, res){
 					break;
 				case "search":
 					args = [criteria];
-					sql = 'SELECT "FullName", "GraduationYear", "Degree", array_to_string(array_agg(CONCAT("Title", \' at \', "Company")), \',\') AS "Company", "Alumni"."ID" FROM "WorkHistory" INNER JOIN "Alumni" ON "WorkHistory"."Alumni_ID"="Alumni"."ID" WHERE "FullName" LIKE \'%{0}%\' OR "GraduationYear"::varchar(10) like \'%{0}%\' OR "Degree" LIKE \'%{0}%\' OR "Company" LIKE \'%{0}%\' GROUP BY "Alumni"."ID" ORDER BY "FullName"';
+					sql = 'SELECT "FullName", "GraduationYear", "Degree", array_to_string(array_agg(CONCAT("Title", \' at \', "Company")), \',\') AS "Company", "Alumni"."ID" FROM "WorkHistory" INNER JOIN "Alumni" ON "WorkHistory"."Alumni_ID"="Alumni"."ID" WHERE "FullName" ILIKE \'%{0}%\' OR "GraduationYear"::varchar(10) ILIKE \'%{0}%\' OR "Degree" ILIKE \'%{0}%\' OR "Company" ILIKE \'%{0}%\' GROUP BY "Alumni"."ID" ORDER BY "FullName"';
 					break;
 				case "report":
 					with(reportSQL.toLowerCase()){
