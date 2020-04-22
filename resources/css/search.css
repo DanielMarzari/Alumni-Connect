@@ -1,0 +1,43 @@
+table {
+	background: white;
+    border-collapse:collapse;
+    width:100%;
+    min-width:400px;
+    text-align:center;
+}
+
+caption {
+    caption-side:bottom;
+    font-weight:bold;
+    font-style:italic;
+    margin:4px;
+}
+
+table,th, td {
+    border: 1px solid gray;
+}
+
+th, td {
+    height: 24px;
+    padding:4px;
+    vertical-align:middle;
+}
+
+th {
+    background-image:url(table-shaded.png);
+}
+
+.rowtitle {
+    font-weight:bold;
+}
+
+#searchTxt{
+	resize: none;
+	float:left;
+	width:90%;
+}
+
+#searchBtn{
+	float: right;
+	width:10%;
+}
