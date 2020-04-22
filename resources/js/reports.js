@@ -15,7 +15,8 @@ function processSQL(json){
 	csv = '';
 	console.log(json);
 	if(typeof json == "string"){
-		alert("There was an error with your SQL. See console for more details.");
+		make_firstHeader("Error");
+		json.split(/\n/).forEach(str => make_firstColumn(str));
 	}else{
 		var fields = [];
 		for(var i = 0; i < json.fields.length; i++){
@@ -139,7 +140,7 @@ function setColumnStyle(indx, max){
 
 function setColumnOffset(size){
   var style = document.createElement('style');
-  style.innerHTML = ".wrap-table100-nextcols {padding-left: " + (size + 80) + "px;}";
+  style.innerHTML = ".wrap-table100-nextcols {padding-left: " + (size*15 + 50) + "px;}";
   document.head.appendChild(style);
 }
 
