@@ -85,6 +85,7 @@ function processWorkSQL(json){
 		infoJob.innerText = json.rows[0].Title + " at " + json.rows[0].Company;
 		var data = []
 		for	(var i = 0; i < json.rows.length; i++){
+			WorkHistory_IDs.push(json.rows[i].ID);
 			data = []
 			data.push(json.rows[i].Title);
 			data.push(json.rows[i].Company + " - " + json.rows[i].Part_FullTime);
@@ -180,17 +181,18 @@ function updateSQL(){
 		with(workExp.children[i].children[0]){
 			sdate = new Date(children[2].innerText.split(' - ')[0]);
 			edate = new Date(children[2].innerText.split(' - ')[1]);
-			
+			console.log(WorkHistory_IDs[i-1]);
 			vars = {callType: "update_wh",
-					ID: WorkHistory_IDs[i],
+					ID: WorkHistory_IDs[i-1],
 					company: children[1].innerText.split(' - ')[0],
 					title: children[0].innerText,
 					time: children[1].innerText.split(' - ')[1],
-					sdate: "'{0}-{1}-{2}'".format(sdate.getFullYear(), ('00' + (sdate.getMonth()+1)).slice(-2), ('00' + sdate.getDate()).slice(-2)),
-					edate: (children[2].innerText.split(' - ')[1] == 'Present') ? "NULL" : "'{0}-{1}-{2}'".format(sdate.getFullYear(), ('00' + (sdate.getMonth()+1)).slice(-2), ('00' + sdate.getDate()).slice(-2)),
+					sdate: "{0}-{1}-{2}".format(sdate.getFullYear(), ('00' + (sdate.getMonth()+1)).slice(-2), ('00' + sdate.getDate()).slice(-2)),
+					edate: (children[2].innerText.split(' - ')[1] == 'Present') ? "NULL" : "{0}-{1}-{2}".format(sdate.getFullYear(), ('00' + (sdate.getMonth()+1)).slice(-2), ('00' + sdate.getDate()).slice(-2)),
 					description: children[3].innerText,
 					AID: ID};
 		}
+		console.log(vars);
 		makeCall(JSON.stringify(vars), processUpdateSQL);
 	}
 	
@@ -200,7 +202,7 @@ function updateSQL(){
 			ID: ID,
 			name: profileName.innerText,
 			gender: infoGender.innerText,
-			bdate: "'{0}-{1}-{2}'".format(bdate.getFullYear(), ('00' + (bdate.getMonth()+1)).slice(-2), ('00' + bdate.getDate()).slice(-2)),
+			bdate: "{0}-{1}-{2}".format(bdate.getFullYear(), ('00' + (bdate.getMonth()+1)).slice(-2), ('00' + bdate.getDate()).slice(-2)),
 			phone: contactNumber.innerText,
 			email: contactEmail.innerText,
 			degree: infoDegree.innerText,
