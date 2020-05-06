@@ -27,3 +27,7 @@ document.onkeydown = function (e) {
 		login();
 	}
 };
+
+if(document.cookie != ""){
+	wondow.location.href = "profile";
+}
