@@ -185,7 +185,7 @@ window.onload = function(e){
 	}else{
 		lastTab.innerHTML = "<a href='../profile'>Profile</a>";
 		var tabs = document.getElementById("tabs");
-		if(getCookie("admin")=="true"){
+		if(getCookie("Permissions")!="Alumni"){
 			tabs.innerHTML += "<li><a href='../reports'>Reporting</a></li>";
 		}
 		tabs.innerHTML += "<li><a href='../search'>Search</a></li>";
