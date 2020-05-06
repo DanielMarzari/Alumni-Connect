@@ -2,22 +2,28 @@ var firstColumn = document.getElementById("firstColumn");
 var otherColumns = document.getElementById("otherColumns");
 var firstHeader = document.getElementById("firstHeader");
 var otherHeaders = document.getElementById("otherHeaders");
-var sqlTxt = document.getElementById("sqlTxt");
+var repType1 = document.getElementById("select");
+var repType2 = document.getElementById("insert");
+var table = document.getElementById("table");
+var fieldRow = document.getElementById("row2");
+var errorBox = document.getElementById("errors");
 var csv = '';
 
-function checkField(){
-	if(sqlTxt.value == "Type SQL"){
-		sqlTxt.value = "";
+document.onkeydown = function (e) {
+    if (e.keyCode == 13) {
+		e.preventDefault();
+		callSQL();
 	}
-}
+};
 
 function processSQL(json){
 	csv = '';
 	console.log(json);
 	if(typeof json == "string"){
-		make_firstHeader("Error");
-		json.split(/\n/).forEach(str => make_firstColumn(str));
+		// add text box and print there
+		errorBox.innerText = json;
 	}else{
+		errorBox.innerText = '';
 		var fields = [];
 		for(var i = 0; i < json.fields.length; i++){
 			fields.push(json.fields[i].name);
@@ -144,9 +150,42 @@ function setColumnOffset(size){
   document.head.appendChild(style);
 }
 
+function getFields(){
+	var vars = {callType: "fields", table: table.value};
+	makeCall(JSON.stringify(vars), addField);
+	
+}
+
+function addField(json){
+	console.log(json);
+	removeTable()
+	fieldRow.innerHTML = '';
+	for(var i = 0; i < json.rowCount; i++){
+		fieldRow.innerHTML += '<li class="report-li"><p class="front">' + json.rows[i].column_name + '</p><input class="after parameter" type="text" id="' + json.rows[i].column_name + '"></li>'
+	}
+}
+
 function callSQL(){
 	removeTable();
-	var vars = {callType: "report", reportSQL: sqlTxt.value};
+	var parameters = document.getElementsByClassName("parameter");
+	if(repType1.checked && !repType2.checked){
+		var call = "SELECT";
+	}else if(!repType1.checked && repType2.checked){
+		var call = "INSERT INTO";
+	}else{
+		alert("Please select an operation");
+		return
+	}
+	
+	var fields = []
+	var vals = []
+	for(var i = 0; i < parameters.length; i++){
+		fields.push(parameters[i].id);
+		vals.push(parameters[i].value);
+	}
+	console.log(fields);
+	console.log(vals);
+	var vars = {callType: "report", operation: call, fields: fields, table:table.value, params: vals};
 	makeCall(JSON.stringify(vars), processSQL);
 }
 
@@ -169,12 +208,12 @@ function downloadCSV(){
 	}
 }
 
-sqlTxt.onkeydown = function (e) {
-    if (e.keyCode == 13) {
-		e.preventDefault();
-		callSQL();
-	}
-};
+window.onload = function(){
+	//if(getCookie("Permissions") != "Alumni"){
+	//	window.location.href = "profile";
+	//}
+	getFields();
+}
 
 var tabs = document.getElementById("tabs");
 tabs.innerHTML += '<li><a href="profile">Profile</a></li>'
