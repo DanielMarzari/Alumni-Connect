@@ -83,12 +83,23 @@
           <h2>Reports</h2>
         </div>
 		
+		
 		<div>
-			<textarea id="sqlTxt" onclick="checkField()">Type SQL</textarea>
-			<button type="button" id="sqlBtn" onclick="callSQL()">Run</button>
+		<ul class="report-ul">
+			<li class="report-li"><p class="front">Table</p><select onchange="getFields()" class="after" id="table" name="table">
+				<option value="Alumni">Alumni</option>
+				<option value="Events">Events</option>
+				<option value="WorkHistory">Work History</option>
+			</select></li>
+			<li class="report-li"><input type="radio" class="front" id="select" name="operaton"><p class="after">SELECT</p></li>
+			<li class="report-li"><input type="radio" class="front" id="insert" name="operaton"><p class="after">INSERT INTO</p></li>
+			<li class="report-li"><button onclick="callSQL()">Run</button></li>
+		</ul>
+		<ul class="report-ul" id="row2"></ul>
 		</div> 
 		
 		<div class="limiter">
+			<p id = "errors"></p>
 			<div class="container-table100">
 				<div class="wrap-table100">
 					<div class="table100 ver1">
