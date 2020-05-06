@@ -82,12 +82,13 @@ th {
 
 .about-item-name {
     width: 10%;
+	float: left;
 }
 
 .about-item-detail {
-    max-width: 28%;
-	position: absolute;
-	left: 54%;
+    float: left;
+	margin-left: 3%;
+	width: 78%;
 }
 
 .work{
